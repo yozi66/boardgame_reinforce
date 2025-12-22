@@ -1,0 +1,13 @@
+name: reinforce
+channels:
+  - conda-forge
+dependencies:
+  - gymnasium
+  - gymnasium-box2d
+  - ipykernel
+  - jupyterlab
+  - python=3.11
+  - stable-baselines3
+  - pettingzoo
+  - pip:
+    - supersuit
