@@ -11,3 +11,4 @@ dependencies:
   - pettingzoo
   - pip:
     - supersuit
+    - generals-bots
