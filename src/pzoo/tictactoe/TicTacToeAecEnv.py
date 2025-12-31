@@ -1,5 +1,7 @@
 from pettingzoo import AECEnv
 from gymnasium import spaces
+from typing import Optional
+import numpy.typing as npt
 import numpy as np
 
 class TicTacToeAecEnv(AECEnv):
@@ -9,8 +11,7 @@ class TicTacToeAecEnv(AECEnv):
         super().__init__()
         self.possible_agents = ["player_0", "player_1"]
         self.agents = []
-        self.board = None
-
+        self.board: Optional[npt.NDArray[np.int8]] = None
         self.action_spaces = {a: spaces.Discrete(9) for a in self.possible_agents}
         # Example obs: 3x3 board with {-1,0,1} plus action mask
         self.observation_spaces = {
@@ -37,6 +38,8 @@ class TicTacToeAecEnv(AECEnv):
         mask = (self.board.reshape(-1) == 0).astype(np.int8)
         return {"observation": self.board.copy(), "action_mask": mask}
 
+    # Perform action for the current agent
+    # action: int in [0..8] representing cell to mark
     def step(self, action):
         agent = self.agent_selection
         if self.terminations[agent] or self.truncations[agent]:
@@ -72,6 +75,7 @@ class TicTacToeAecEnv(AECEnv):
         self._agent_index = (self._agent_index + 1) % len(self.agents)
 
     def _check_winner(self):
+        assert self.board is not None, "Call reset() before using board"
         # return "player_0" or "player_1" or None
         lines = []
         lines += [self.board[i, :] for i in range(3)]

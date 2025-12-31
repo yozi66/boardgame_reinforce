@@ -75,6 +75,8 @@ class TicTacToeEnv(gym.Env):
 
         # Illegal move: occupied cell
         if self.board[action] != 0:
+            if (self.render_mode == "human"):
+                print(f"Illegal move by player {'X' if self.player == 1 else 'O'} at cell {action}")
             terminated = True
             reward = -1.0
             info["illegal_move"] = True
@@ -90,10 +92,14 @@ class TicTacToeEnv(gym.Env):
             terminated = True
             reward = 1.0  # acting player just won
             info["winner"] = "X" if w == 1 else "O"
+            if self.render_mode == "human":
+                print(f"Player {'X' if w == 1 else 'O'} wins!")
         elif np.all(self.board != 0):
             terminated = True
             reward = 0.0
             info["winner"] = None  # draw
+            if self.render_mode == "human":
+                print("Game ended in a draw.")
         else:
             reward = 0.0
 
@@ -108,7 +114,7 @@ class TicTacToeEnv(gym.Env):
 
     def render(self):
         symbols = {1: "X", -1: "O", 0: " "}
-        b = [symbols[v] for v in self.board]
+        b = [symbols[int(v)] for v in self.board]
         s = (
             f"{b[0]}|{b[1]}|{b[2]}\n"
             f"-+-+-\n"
