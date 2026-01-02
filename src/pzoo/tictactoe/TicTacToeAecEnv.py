@@ -7,7 +7,7 @@ import numpy as np
 class TicTacToeAecEnv(AECEnv):
     metadata = {"render_modes": ["human"], "name": "tictactoe_v0"}
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.possible_agents = ["player_0", "player_1"]
         self.agents = []
@@ -21,7 +21,7 @@ class TicTacToeAecEnv(AECEnv):
             }) for a in self.possible_agents
         }
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed: Optional[int] = None, options: Optional[dict] = None) -> None:
         self.agents = self.possible_agents[:]
         self.board = np.zeros((3,3), dtype=np.int8)
         self.rewards = {a: 0.0 for a in self.agents}
@@ -31,16 +31,16 @@ class TicTacToeAecEnv(AECEnv):
         self._agent_index = 0
 
     @property
-    def agent_selection(self):
+    def agent_selection(self) -> str:
         return self.agents[self._agent_index]
 
-    def observe(self, agent):
+    def observe(self, agent: str) -> dict:
         mask = (self.board.reshape(-1) == 0).astype(np.int8)
         return {"observation": self.board.copy(), "action_mask": mask}
 
     # Perform action for the current agent
     # action: int in [0..8] representing cell to mark
-    def step(self, action):
+    def step(self, action: int) -> None:
         agent = self.agent_selection
         if self.terminations[agent] or self.truncations[agent]:
             self._agent_index = (self._agent_index + 1) % len(self.agents)
@@ -74,7 +74,7 @@ class TicTacToeAecEnv(AECEnv):
 
         self._agent_index = (self._agent_index + 1) % len(self.agents)
 
-    def _check_winner(self):
+    def _check_winner(self) -> Optional[str]:
         assert self.board is not None, "Call reset() before using board"
         # return "player_0" or "player_1" or None
         lines = []
@@ -87,7 +87,7 @@ class TicTacToeAecEnv(AECEnv):
             if s == -3: return "player_1"
         return None
 
-    def render(self):
+    def render(self) -> None:
         symbol_map = {1: "X", -1: "O", 0: " "}
         for r in range(3):
             print("|".join(symbol_map[self.board[r, c]] for c in range(3)))

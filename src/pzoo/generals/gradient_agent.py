@@ -59,9 +59,6 @@ class GradientAgent(Agent):
             max_army_pos = np.unravel_index(max_army_flat_index, army_mask.shape)
             height = army_mask.shape[0]
             width = army_mask.shape[1]
-            # TODO: remove commented code if works fine
-            # max_army_int_pos = (int(max_army_pos[0]), int(max_army_pos[1]))
-            # print("max army pos:", max_army_int_pos)
 
             # breadth-first search to find the nearest opponent or neutral cell
             queue = deque()
@@ -83,9 +80,6 @@ class GradientAgent(Agent):
                     neighbor = (row + row_offset, col + col_offset)
                     if mountains_mask[neighbor]:
                         continue
-                    # TODO: remove commented code if works fine
-                    # print("neighbor:", neighbor)
-                    # print("visited:", visited)
                     if neighbor not in visited:
                         new_move = (row, col, direction) if old_move is None else old_move
                         visited.add(neighbor)
