@@ -9,6 +9,9 @@ dependencies:
   - python=3.11
   - stable-baselines3
   - pettingzoo
+  - cmake
   - pip:
     - supersuit
     - generals-bots
+    - ray[rllib]
+    - open_spiel
