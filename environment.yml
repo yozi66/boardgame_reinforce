@@ -10,6 +10,7 @@ dependencies:
   - stable-baselines3
   - pettingzoo
   - cmake
+  - tensorboard
   - pip:
     - supersuit
     - generals-bots
