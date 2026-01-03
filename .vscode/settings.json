@@ -1,3 +1,4 @@
 {
-  "python.defaultInterpreterPath": "/home/frigo/miniforge3/envs/reinforce/bin/python"
+  "python.defaultInterpreterPath": "/home/frigo/miniforge3/envs/reinforce/bin/python",
+  "python.terminal.activateEnvironment": true
 }
