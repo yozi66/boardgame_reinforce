@@ -29,13 +29,13 @@ from ray.rllib.core.rl_module.rl_module import RLModuleSpec
 from ray.rllib.env.utils import try_import_open_spiel, try_import_pyspiel
 from ray.rllib.env.wrappers.open_spiel import OpenSpielEnv
 from ray.rllib.examples._old_api_stack.policy.random_policy import RandomPolicy
-from ray.rllib.examples.multi_agent.utils import (
+from ray.rllib.examples.multi_agent.utils import ( 
     SelfPlayCallback,
     SelfPlayCallbackOldAPIStack,
     ask_user_for_action,
 )
 from ray.rllib.examples.rl_modules.classes.random_rlm import RandomRLModule
-from ray.rllib.examples.utils import (
+from utils import ( # local copy of ray.rllib.examples.utils
     add_rllib_example_script_args,
     run_rllib_example_script_experiment,
 )
@@ -77,7 +77,7 @@ parser.add_argument(
 parser.add_argument(
     "--num-episodes-human-play",
     type=int,
-    default=10,
+    default=1,
     help="How many episodes to play against the user on the command "
     "line after training has finished.",
 )
