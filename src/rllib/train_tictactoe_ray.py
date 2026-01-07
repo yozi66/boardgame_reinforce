@@ -1,3 +1,4 @@
+from pprint import pprint
 import ray
 from ray.rllib.algorithms.ppo import PPOConfig
 from ray.tune.registry import register_env
@@ -35,6 +36,6 @@ config = (
 algo = config.build()   # if your Ray version supports build_algo(), that’s fine too
 rounds = 4
 for _ in range(rounds):
-    print(algo.train())
+    pprint(algo.train())
     print("=======================================")
     print(f"Completed round {_+1} of {rounds}")
