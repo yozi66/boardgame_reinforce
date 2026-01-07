@@ -34,8 +34,8 @@ class TicTacToeRayEnv(MultiAgentEnv):
         # A 0 means an empty field, a 1 represents a piece of player 1, a -1 a piece of
         # player 2.
         self.observation_spaces = {
-            "player1": gym.spaces.Box(-1.0, 1.0, (9,), np.int8),
-            "player2": gym.spaces.Box(-1.0, 1.0, (9,), np.int8),
+            "player1": gym.spaces.Box(-1.0, 1.0, (9,), np.float32),
+            "player2": gym.spaces.Box(-1.0, 1.0, (9,), np.float32),
         }
         # Each player has 9 actions, encoding the 9 fields each player can place a piece
         # on during their turn.
@@ -62,7 +62,7 @@ class TicTacToeRayEnv(MultiAgentEnv):
         # Return observations dict (only with the starting player, which is the one
         # we expect to act next).
         return {
-            self.current_player: np.array(self.board, np.int8),
+            self.current_player: np.array(self.board, np.float32),
         }, {}
 
     def step(self, action_dict) -> tuple:
@@ -122,7 +122,7 @@ class TicTacToeRayEnv(MultiAgentEnv):
         multiplier = 1 if self.current_player == "player1" else -1
 
         return (
-            {self.current_player: np.array(self.board, np.int8) * multiplier},
+            {self.current_player: np.array(self.board, np.float32) * multiplier},
             rewards,
             terminateds,
             {},
