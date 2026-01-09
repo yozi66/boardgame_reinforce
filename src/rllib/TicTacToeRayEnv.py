@@ -1,5 +1,7 @@
 import gymnasium as gym
 import numpy as np
+import random
+import string
 
 from ray.rllib.env.multi_agent_env import MultiAgentEnv
 
@@ -50,6 +52,8 @@ class TicTacToeRayEnv(MultiAgentEnv):
             0, 0, 0,
         ] # redundant with reset, but needed to make pylance happy later on
         self.current_player = None
+        self.name = "TicTacToeRayEnv_" + self._random_id()
+        print(f"Initialized environment {self.name}")
 
     def reset(self, *, seed=None, options=None):
         self.board = [
@@ -59,6 +63,10 @@ class TicTacToeRayEnv(MultiAgentEnv):
         ]
         # Pick a random player to start the game.
         self.current_player = np.random.choice(["player1", "player2"])
+        # Randomly switch on printing
+        self.tracing = random.randint(1, 500) == 1
+        if self.tracing:
+            print(f"[{self.name}] Starting new game, first to play: {self.current_player}")
         # Return observations dict (only with the starting player, which is the one
         # we expect to act next).
         return {
@@ -76,13 +84,24 @@ class TicTacToeRayEnv(MultiAgentEnv):
 
         opponent = "player1" if self.current_player == "player2" else "player2"
 
+        if self.tracing and self.current_player == "player1":
+            print(f"[{self.name}] Player {self.current_player} takes action {action}")
+
         # Penalize trying to place a piece on an already occupied field.
         if self.board[action] != 0:
             rewards[self.current_player] -= 5.0
+            if self.tracing:
+                print(
+                    f"[{self.name}] Player {self.current_player} tried to play "
+                    f"an invalid action {action} on occupied field."
+                )
+            terminateds["__all__"] = True
+
         # Change the board according to the (valid) action taken.
         else:
             self.board[action] = 1 if self.current_player == "player1" else -1
-
+            if self.tracing:
+                self.render()
             # After having placed a new piece, figure out whether the current player
             # won or not.
             if self.current_player == "player1":
@@ -128,3 +147,18 @@ class TicTacToeRayEnv(MultiAgentEnv):
             {},
             {},
         )
+    
+    def _random_id(self, length=4):
+        """Generate a random string of fixed length."""
+        chars = string.ascii_uppercase + string.digits
+        return ''.join(random.choices(chars, k=length))
+    
+    def render(self, mode="human"):
+        symbols = {1: "X", -1: "O", 0: " "}
+        print("-------------")
+        for i in range(3):
+            row = "| "
+            for j in range(3):
+                row += symbols[self.board[i * 3 + j]] + " | "
+            print(row)
+            print("-------------")
