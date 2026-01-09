@@ -5,6 +5,20 @@ from ray.tune.registry import register_env
 
 from TicTacToeRayEnv import TicTacToeRayEnv
 
+def log_result(r):
+    learner = r["learners"]["p1"]
+    print(
+        f"iter={r['training_iteration']:>3} | "
+        f"steps={int(r['num_env_steps_sampled_lifetime']):>6} | "
+        f"episodes={int(r['env_runners']['num_episodes_lifetime']):>4} | "
+        f"episode_return={r['env_runners']['episode_return_mean']:+7.2f} | "
+        f"episode_len={r['env_runners']['episode_len_mean']:5.1f} | "
+        f"policy_loss={learner['policy_loss']:+.4f} | "
+        f"vf_loss={learner['vf_loss']:.2f} | "
+        f"entropy={learner['entropy']:.3f}"
+    )
+
+
 ray.init()
 
 register_env("tictactoe", lambda cfg: TicTacToeRayEnv(cfg))
@@ -36,6 +50,7 @@ config = (
 algo = config.build()   # if your Ray version supports build_algo(), that’s fine too
 rounds = 4
 for _ in range(rounds):
-    pprint(algo.train())
+    metrics = algo.train()
     print("=======================================")
-    print(f"Completed round {_+1} of {rounds}")
+    log_result(metrics)
+
