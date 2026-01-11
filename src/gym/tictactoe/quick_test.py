@@ -4,6 +4,7 @@ import numpy as np
 env = TicTacToeEnv(render_mode="human")
 obs, info = env.reset()
 
+reward = None # make pylance happy
 done = False
 while not done:
     # random valid move:
